@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  name         String?
+  role         String         @default("user") // "user" or "admin"
+  status       String         @default("active") // "active" or "disabled"
+  reports      Report[]
+  resumes      Resume[]
+  chatSessions ChatSessions[]
+  activities   UserActivity[]
+  skillProgress SkillProgress[]
+  savedJobs     SavedJob[]
+  roadmaps      UserRoadmap[]
+  streak       Int            @default(0)
+  lastActive   DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Resume {
+  id             String        @id @default(cuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileName       String
+  fileType       String
+  fileSize       Int
+  fileData       Bytes         // Store the binary file data
+  version        Int           @default(1)
+  isLatest       Boolean       @default(true)
+  report         Report?       @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reportId       String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Report {
+  id             String        @id @default(cuid())
+  candidateName  String
+  resumeData     Json
+  analysisResult Json
+  overallScore   Int
+  placementRisk  String
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatSessions   ChatSessions[]
+  roadmaps       UserRoadmap[]
+  resumes        Resume[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model SkillProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillName String
+  category  String?
+  status    String   @default("pending") // "pending", "in_progress", "completed"
+  progress  Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, skillName])
+}
+
+model SavedJob {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId       String
+  title       String
+  company     String
+  location    String?
+  salary      String?
+  matchScore  Int?
+  url         String?
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, jobId])
+}
+
+model UserRoadmap {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reportId  String
+  report    Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  status    String   @default("active") // "active", "completed", "archived"
+  steps     Json     // Array of steps with completion status: { phase, completedTasks: string[] }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, reportId])
+}
+
+model ChatSessions {
+  id        String        @id @default(cuid())
+  title     String?
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reportId  String?
+  report    Report?       @relation(fields: [reportId], references: [id], onDelete: SetNull)
+  messages  ChatMessage[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ChatMessage {
+  id        String       @id @default(cuid())
+  role      String // 'user' or 'assistant'
+  content   String
+  sessionId String
+  session   ChatSessions @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+}
+
+model UserActivity {
+  id        String   @id @default(cuid())
+  type      String // 'login', 'upload', 'analysis', 'search', 'chat'
+  detail    String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model SystemMetric {
+  id        String   @id @default(cuid())
+  name      String // 'ai_latency', 'api_success_rate', etc.
+  value     Float
+  category  String // 'ai', 'ocr', 'job_api'
+  createdAt DateTime @default(now())
+}
+
+model ErrorLog {
+  id        String   @id @default(cuid())
+  type      String // 'backend', 'ai', 'ocr', 'job_api'
+  message   String
+  stack     String?
+  path      String?
+  userId    String?
+  createdAt DateTime @default(now())
+}
+
+model AdminLog {
+  id        String   @id @default(cuid())
+  action    String
+  target    String?
+  userId    String
+  createdAt DateTime @default(now())
+}

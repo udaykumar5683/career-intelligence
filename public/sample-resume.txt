@@ -1,0 +1,42 @@
+JOHN SMITH
+Email: john.smith@gmail.com | Phone: +1-555-0123 | Location: San Francisco, CA
+
+PROFESSIONAL SUMMARY
+Motivated Computer Science graduate with 2 years of experience in full-stack web development. Proficient in JavaScript, React, and Node.js with a passion for building user-friendly applications. Seeking opportunities to grow as a software engineer in a collaborative environment.
+
+EDUCATION
+Bachelor of Science in Computer Science
+University of California, Berkeley | 2022
+GPA: 3.6/4.0
+
+SKILLS
+Technical: JavaScript, TypeScript, React, Node.js, HTML, CSS, Git, REST APIs, MongoDB, Express.js
+Soft: Communication, Team Collaboration, Problem Solving, Time Management
+Tools: VS Code, GitHub, Jira, Figma
+
+EXPERIENCE
+
+Junior Frontend Developer | TechStart Inc., San Francisco, CA
+June 2022 - Present
+- Developed and maintained responsive web applications using React and TypeScript
+- Collaborated with UX designers to implement pixel-perfect UI components
+- Improved page load times by 30% through code splitting and lazy loading
+- Participated in daily standups and bi-weekly sprint planning
+
+Web Development Intern | Digital Solutions LLC, San Jose, CA
+Jan 2022 - May 2022
+- Built reusable React component library used across 3 projects
+- Wrote unit tests using Jest and React Testing Library achieving 85% coverage
+- Assisted in migrating legacy jQuery codebase to modern React
+
+CERTIFICATIONS
+- AWS Cloud Practitioner (2023)
+- Meta Frontend Developer Professional Certificate (2022)
+
+LANGUAGES
+English (Native), Spanish (Intermediate)
+
+PROJECTS
+- E-commerce Dashboard: Built a real-time analytics dashboard using React, Chart.js, and Firebase
+- Task Management App: Developed a full-stack todo application with React, Node.js, and MongoDB
+- Portfolio Website: Created a personal portfolio using Next.js and Tailwind CSS
